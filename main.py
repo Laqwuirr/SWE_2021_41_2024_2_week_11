@@ -2,9 +2,11 @@ from typing import List
 
 def path_to_file_list(path: str) -> List[str]:
     """Reads a file and returns a list of lines in the file"""
-    # Will this be working?
-    lines = open(path, 'r').read().split('\n')
-    return lines
+    
+    # Fixed version
+    with open(path, 'r') as f:
+        lines = f.readlines()
+    return [line.strip() for line in lines]
 
 def train_file_list_to_json(english_file_list: List[str], german_file_list: List[str]) -> List[str]:
     """Converts two lists of file paths into a list of json strings"""
@@ -22,13 +24,14 @@ def train_file_list_to_json(english_file_list: List[str], german_file_list: List
     template_mid = '\",\"German\":\"'
     template_end = '\"}'
 
-    # Can this be working?
     processed_file_list = []
     for english_file, german_file in zip(english_file_list, german_file_list):
         english_file = process_file(english_file)
-        english_file = process_file(german_file)
+        german_file = process_file(german_file)
 
-        processed_file_list.append(template_end + english_file + template_mid + german_file + template_start)
+        # Fixed version
+        json_string = template_start + english_file + template_mid + german_file + template_end
+        processed_file_list.append(json_string)
     return processed_file_list
 
 
